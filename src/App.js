@@ -1,26 +1,37 @@
 import React from 'react';
-import logo from './logo.svg';
+import { useRoutes } from 'hookrouter'
+import styled from 'styled-components'
+import AppProvider from './AppProvider.js'
+import { AppContext } from './AppProvider.js'
 import './App.css';
 
+import { Home } from './pages/Home';
+import { Register } from './pages/register/Register.jsx'
+
+const StyledApp = styled.div`
+    margin: 0;
+    padding: 0;
+`;
+
+export const routes = {
+  '/': () => <Home />,
+  '/register': () => <Register />
+}
+
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  const routeResult = useRoutes(routes);
+
+    return (
+        <AppProvider>
+            <AppContext.Consumer>
+                {({  }) => (
+                    <StyledApp>
+                        { routeResult }
+                    </StyledApp>
+                )}
+            </AppContext.Consumer>
+        </AppProvider>
+    )
 }
 
 export default App;
