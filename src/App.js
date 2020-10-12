@@ -8,7 +8,7 @@ class App extends React.Component {
     constructor() {
       super();
       this.state = {
-        type: 3,
+        type: "",
         classSelected: "",
         subject: "",
         term: "",
