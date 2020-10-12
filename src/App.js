@@ -8,7 +8,7 @@ class App extends React.Component {
     constructor() {
       super();
       this.state = {
-        type: "",
+        type: 3,
         classSelected: "",
         subject: "",
         term: "",
@@ -160,9 +160,9 @@ class App extends React.Component {
                     <label>Type</label>
                     <br />
                     <select name="type" value={ this.state.type } onChange={ this.onChangeEvent }>
-                            <option value="assignment">Assignment</option>
-                            <option value="mid-term test">Mid-Term test</option>
-                            <option value="examination">Examination</option>
+                            <option value={3}>Assignment</option>
+                            <option value="2">Mid-Term test</option>
+                            <option value="3">Examination</option>
                     </select>
                 </div>
                 <div>
