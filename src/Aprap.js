@@ -1,15 +1,19 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import './App.css'
+// import styled from 'styled-components'
+// import  socketIoClient from 'socket.io-client'
 
-const App = () => {
 
-    const [state, setState] = useState({
-        type: "A",
-        classSelected: "A",
-        subject: "A",
-        term: "A",
-        week: "A",
-        topic: "A",
+class App extends React.Component {
+    constructor() {
+      super();
+      this.state = {
+        type: "",
+        classSelected: "",
+        subject: "",
+        term: "",
+        week: "",
+        topic: "",
         questions: [
             {   id: 1,
                 question: "", 
@@ -21,129 +25,141 @@ const App = () => {
                 correction: "", 
                 correctionImage: ""
             }
-        ]
-    })
+        ],
+      };
+    }
 
-    useEffect(() => {
-        console.log(state)
-    })
+    componentDidUpdate(){
+        console.log(this.state)
+    }
 
-    const handleSubmit = (evt) => {
+    handleSubmit = (evt) => {
         evt.preventDefault()
 
-        const { type, classSelected, subject, term, week, topic, questions } = state
+        const { type, classSelected, subject, term, week, topic, questions } = this.state;
 
         const data = { type, classSelected, subject, term, week, topic, questions }
 
         fetch('https://firstclassbrain-server.herokuapp.com/upload-test', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data),
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
         })
         .then(response => response.json())
         .then(data => {
-            console.log('Success:', data);
+        console.log('Success:', data);
         })
         .catch((error) => {
-            console.error('Error:', error);
+        console.error('Error:', error);
         });
     }
-
-    const handleAddShareholder = () => {
-        setState({...state, questions: state.questions.concat([{ id: state.questions.length + 1 }]) });
+    
+    handleAddShareholder = () => {
+      this.setState({ questions: this.state.questions.concat([{ id: this.state.questions.length + 1 }]) });
+    }
+    
+    handleRemoveShareholder = (idx) => () => {
+      this.setState({ questions: this.state.questions.filter((s, qidx) => idx !== qidx) });
     }
 
-    const handleRemoveShareholder = (idx) => () => {
-        setState({...state, questions: state.questions.filter((s, qidx) => idx !== qidx) });
+    onChangeEvent = (event) => {
+        this.setState({...this.state, [event.target.name]: event.target.value })
     }
-  
-    const onChangeEvent = (event) => {
-        setState({...state, [event.target.name]: event.target.value })
-    }
+    
+    // handleShareholderNameChange = (idx) => (evt) => {
+    //   const newQuestions = this.state.questions.map((question, qidx) => {
+    //     if (idx !== qidx) return question;
+    //     return { ...question, name: evt.target.value };
+    //   });
+      
+    //   this.setState({ questions: newQuestions });
+    // }
 
-    const handleShareholderQuestionChange = (idx) => (evt) => {
-        const newQuestions = state.questions.map((shareholder, qidx) => {
+    handleShareholderQuestionChange = (idx) => (evt) => {
+        const newQuestions = this.state.questions.map((shareholder, qidx) => {
           if (idx !== qidx) return shareholder;
           return { ...shareholder, question: evt.target.value };
         });
         
-        setState({...state, questions: newQuestions });
+        this.setState({ questions: newQuestions });
     }
 
-    const handleShareholderAnsweraChange = (idx) => (evt) => {
-        const newQuestions = state.questions.map((shareholder, qidx) => {
+    handleShareholderAnsweraChange = (idx) => (evt) => {
+        const newQuestions = this.state.questions.map((shareholder, qidx) => {
           if (idx !== qidx) return shareholder;
           return { ...shareholder, answerA: evt.target.value };
         });
         
-        setState({...state, questions: newQuestions });
+        this.setState({ questions: newQuestions });
     }
 
-    const handleShareholderAnswerbChange = (idx) => (evt) => {
-        const newQuestions = state.questions.map((shareholder, qidx) => {
+    handleShareholderAnswerbChange = (idx) => (evt) => {
+        const newQuestions = this.state.questions.map((shareholder, qidx) => {
           if (idx !== qidx) return shareholder;
           return { ...shareholder, answerB: evt.target.value };
         });
         
-        setState({...state, questions: newQuestions });
+        this.setState({ questions: newQuestions });
     }
 
-    const handleShareholderAnswercChange = (idx) => (evt) => {
-        const newQuestions = state.questions.map((shareholder, qidx) => {
+    handleShareholderAnswercChange = (idx) => (evt) => {
+        const newQuestions = this.state.questions.map((shareholder, qidx) => {
           if (idx !== qidx) return shareholder;
           return { ...shareholder, answerC: evt.target.value };
         });
         
-        setState({...state, questions: newQuestions });
+        this.setState({ questions: newQuestions });
     }
-
-    const handleShareholderAnswerdChange = (idx) => (evt) => {
-        const newQuestions = state.questions.map((shareholder, qidx) => {
+    
+    handleShareholderAnswerdChange = (idx) => (evt) => {
+        const newQuestions = this.state.questions.map((shareholder, qidx) => {
           if (idx !== qidx) return shareholder;
           return { ...shareholder, answerD: evt.target.value };
         });
         
-        setState({...state, questions: newQuestions });
+        this.setState({ questions: newQuestions });
     }
 
-    const handleShareholderCorrectAnswerChange = (idx) => (evt) => {
-        const newQuestions = state.questions.map((shareholder, qidx) => {
+    handleShareholderCorrectAnswerChange = (idx) => (evt) => {
+        const newQuestions = this.state.questions.map((shareholder, qidx) => {
           if (idx !== qidx) return shareholder;
           return { ...shareholder, correctAnswer: evt.target.value };
         });
         
-        setState({...state, questions: newQuestions });
+        this.setState({ questions: newQuestions });
     }
 
-    const handleShareholderCorrectionChange = (idx) => (evt) => {
-        const newQuestions = state.questions.map((shareholder, qidx) => {
+    handleShareholderCorrectionChange = (idx) => (evt) => {
+        const newQuestions = this.state.questions.map((shareholder, qidx) => {
           if (idx !== qidx) return shareholder;
           return { ...shareholder, correction: evt.target.value };
         });
         
-        setState({...state, questions: newQuestions });
+        this.setState({ questions: newQuestions });
     }
 
-    const handleShareholderCorrectionImageChange = (idx) => (evt) => {
-        const newQuestions = state.questions.map((shareholder, qidx) => {
+    handleShareholderCorrectionImageChange = (idx) => (evt) => {
+        const newQuestions = this.state.questions.map((shareholder, qidx) => {
           if (idx !== qidx) return shareholder;
           return { ...shareholder, correctionImage: evt.target.value };
         });
         
-        setState({...state, questions: newQuestions });
+        this.setState({ questions: newQuestions });
     }
 
-    return (
-        <form onSubmit={handleSubmit}>
+    
+    render() {    
+      return (
+        <form onSubmit={this.handleSubmit}>
           <h2>Set Test</h2>
 
             <div className="flex">
                 <div>
                     <label>Type</label>
                     <br />
-                    <select name="type" value={ state.type } onChange={ onChangeEvent }>
+                    <select name="type" value={ this.state.type } onChange={ this.onChangeEvent }>
                             <option value={3}>Assignment</option>
                             <option value="2">Mid-Term test</option>
                             <option value="3">Examination</option>
@@ -152,7 +168,7 @@ const App = () => {
                 <div>
                     <label>Class</label>
                     <br />
-                    <input type="text" name="classSelected" value={ state.classSelected } onChange={ onChangeEvent } />
+                    <input type="text" name="classSelected" value={ this.state.classSelected } onChange={ this.onChangeEvent } />
                 </div>
             </div>
 
@@ -160,12 +176,12 @@ const App = () => {
                 <div>
                     <label>Subject</label>
                     <br />
-                    <input type="text" name="subject" value={ state.subject } onChange={ onChangeEvent } />
+                    <input type="text" name="subject" value={ this.state.subject } onChange={ this.onChangeEvent } />
                 </div>
                 <div>
                     <label>Term</label>
                     <br />
-                    <input type="text" name="term" value={ state.term } onChange={ onChangeEvent } />
+                    <input type="text" name="term" value={ this.state.term } onChange={ this.onChangeEvent } />
                 </div>
             </div>
 
@@ -173,12 +189,12 @@ const App = () => {
                 <div>
                     <label>Week</label>
                     <br />
-                    <input type="text" name="week" value={ state.week } onChange={ onChangeEvent } />
+                    <input type="text" name="week" value={ this.state.week } onChange={ this.onChangeEvent } />
                 </div>
                 <div>
                     <label>Topic</label>
                     <br />
-                    <input type="text" name="topic" value={ state.topic } onChange={ onChangeEvent } />
+                    <input type="text" name="topic" value={ this.state.topic } onChange={ this.onChangeEvent } />
                 </div>
             </div>
 
@@ -187,7 +203,7 @@ const App = () => {
             <div className="question">
                 <label>Questions</label>
                 <br />
-                {state.questions.map((shareholder, idx) => (
+                {this.state.questions.map((shareholder, idx) => (
                     <div className="shareholder">
                         <div className="quest">
                             <div className="quest-in">
@@ -196,28 +212,28 @@ const App = () => {
                                     key={idx + 1}
                                     placeholder={`question`}
                                     value={shareholder.question}
-                                    onChange={handleShareholderQuestionChange(idx)}
+                                    onChange={this.handleShareholderQuestionChange(idx)}
                                 />
                                 <input
                                     type="text"
                                     key={idx + 1}
                                     placeholder={`answerA`}
                                     value={shareholder.answerA}
-                                    onChange={handleShareholderAnsweraChange(idx)}
+                                    onChange={this.handleShareholderAnsweraChange(idx)}
                                 />
                                 <input
                                     type="text"
                                     key={idx + 1}
                                     placeholder={`answerB`}
                                     value={shareholder.answerB}
-                                    onChange={handleShareholderAnswerbChange(idx)}
+                                    onChange={this.handleShareholderAnswerbChange(idx)}
                                 />
                                 <input
                                     type="text"
                                     key={idx + 1}
                                     placeholder={`answerC`}
                                     value={shareholder.answerC}
-                                    onChange={handleShareholderAnswercChange(idx)}
+                                    onChange={this.handleShareholderAnswercChange(idx)}
                                 />
                             </div>
                             <div className="quest-in">
@@ -226,39 +242,75 @@ const App = () => {
                                     key={idx + 1}
                                     placeholder={`answerD`}
                                     value={shareholder.answerD}
-                                    onChange={handleShareholderAnswerdChange(idx)}
+                                    onChange={this.handleShareholderAnswerdChange(idx)}
                                 />
                                 <input
                                     type="text"
                                     key={idx + 1}
                                     placeholder={`correctAnswer`}
                                     value={shareholder.correctAnswer}
-                                    onChange={handleShareholderCorrectAnswerChange(idx)}
+                                    onChange={this.handleShareholderCorrectAnswerChange(idx)}
                                 />
                                 <input
                                     type="text"
                                     key={idx + 1}
                                     placeholder={`correction`}
                                     value={shareholder.correction}
-                                    onChange={handleShareholderCorrectionChange(idx)}
+                                    onChange={this.handleShareholderCorrectionChange(idx)}
                                 />
                                 <input
                                     type="text"
                                     key={idx + 1}
                                     placeholder={`correctionImage`}
                                     value={shareholder.correctionImage}
-                                    onChange={handleShareholderCorrectionImageChange(idx)}
+                                    onChange={this.handleShareholderCorrectionImageChange(idx)}
                                 />
                             </div>
                         </div>
-                        <button type="button" onClick={handleRemoveShareholder(idx)} className="small">-</button>
+                        <button type="button" onClick={this.handleRemoveShareholder(idx)} className="small">-</button>
                     </div>
                 ))}
-                <button type="button" onClick={handleAddShareholder} className="small left">Add Question</button>
+                <button type="button" onClick={this.handleAddShareholder} className="small left">Add Question</button>
             </div>
             <button>Submit</button>
         </form>
-    )
-}
+      )
+    }
+  }
+  
 
-export default App
+
+export default App;
+
+
+
+
+// const StyledApp = styled.div`
+//     margin: 0;
+//     padding: 3em 6em;
+//     background: #282c34;
+//     color: #fff;
+// `
+// const App = () => {
+
+//     const socket = socketIoClient('http://localhost:5000')
+
+//     socket.on('connect', () => {
+
+//         console.log('A user new user just connected...')
+    
+//         socket.on('Your id', (id) => {
+//             console.log('User id', id)
+//         })
+
+//         socket.emit('Listen', {message: 'Listen Cash app'})
+        
+//     })
+
+//     return (
+//         <StyledApp>
+//             <h1>Hi</h1>
+//         </StyledApp>
+//     )
+
+// }
